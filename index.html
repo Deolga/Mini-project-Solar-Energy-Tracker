@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar Energy Tracker • Physics-Based PV Simulation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>☀ SOLAR ENERGY TRACKER</h1>
+    <p>Physics-Based Photovoltaic Power Simulation with Real Weather Data</p>
+  </header>
+
+  <main class="home">
+    <section class="hero">
+      <h2>Solar Panel Math &amp; Weather Simulation</h2>
+      <p>
+        This simulation combines solar geometry, real-time and historical weather reports
+        (GHI, DNI, DHI, and ambient temperature), plane-of-array transposition, module thermal
+        behavior, single-diode electrical modeling, maximum power point tracking, and daily
+        AC energy production.
+      </p>
+      <a href="simulation.html" class="start-button">START SIMULATION</a>
+    </section>
+
+    <section class="cards">
+      <div class="card">
+        <h3>☀ Sun Position</h3>
+        <p>
+          Solar zenith, elevation, and azimuth angles are calculated continuously from your
+          selected date, city coordinates, and automatically detected local timezone.
+        </p>
+      </div>
+      <div class="card">
+        <h3>🌦 Weather &amp; Panel</h3>
+        <p>
+          Fetches hourly solar irradiance and ambient temperature from Open-Meteo (with 7Timer!
+          live weather backup), applying panel tilt, azimuth, tracking, reflection, and NOCT heating.
+        </p>
+      </div>
+      <div class="card">
+        <h3>⚡ PV Power</h3>
+        <p>
+          A calibrated single-diode photovoltaic model solves the I–V characteristic to track
+          the Maximum Power Point (MPP), DC output, inverter efficiency, and daily kWh.
+        </p>
+      </div>
+    </section>
+
+    <section class="research">
+      <h2>Research Basis</h2>
+      <div class="reference">
+        <h3>Spencer (1971) &amp; Cooper (1969) Solar Geometry</h3>
+        <p>
+          Standard astronomical solar declination and Equation of Time formulations used to
+          compute solar elevation, zenith, and azimuth angles throughout the 24-hour cycle.
+        </p>
+      </div>
+      <div class="reference">
+        <h3>Mayer &amp; Gróf (2021)</h3>
+        <p>
+          <em>Extensive Comparison of Physical Models for Photovoltaic Power Forecasting</em>,
+          Applied Energy, 283, 116239. Supports the physical model chain involving irradiance,
+          transposition, optical reflection, temperature, PV performance, and inverter modeling.
+        </p>
+      </div>
+      <div class="reference">
+        <h3>Copper, Sproul &amp; Jarnason (2016)</h3>
+        <p>
+          <em>Photovoltaic Performance Modelling in the Absence of Onsite Measured Plane of Array
+          Irradiance and Module Temperature</em>, Renewable Energy, 86, 760–769. Supports
+          transposing horizontal weather irradiance to POA irradiance and estimating cell temperature.
+        </p>
+      </div>
+    </section>
+
+    <section class="terminology">
+      <h2>Terminology &amp; Abbreviations</h2>
+      <div class="term-grid">
+        <div>
+          <h3>Solar Radiation</h3>
+          <p><strong>GHI</strong> — Global Horizontal Irradiance (W/m²)</p>
+          <p><strong>DNI</strong> — Direct Normal Irradiance (W/m²)</p>
+          <p><strong>DHI</strong> — Diffuse Horizontal Irradiance (W/m²)</p>
+          <p><strong>POA</strong> — Plane-of-Array Irradiance (W/m²)</p>
+          <p><strong>Albedo</strong> — Fraction of solar radiation reflected by the ground (0.20 default)</p>
+        </div>
+        <div>
+          <h3>Photovoltaic System</h3>
+          <p><strong>PV</strong> — Photovoltaic</p>
+          <p><strong>MPP / MPPT</strong> — Maximum Power Point / Tracking</p>
+          <p><strong>DC / AC</strong> — Direct Current / Alternating Current</p>
+          <p><strong>NOCT</strong> — Nominal Operating Cell Temperature (45 °C default)</p>
+          <p><strong>STC</strong> — Standard Test Conditions (1000 W/m², 25 °C)</p>
+        </div>
+        <div>
+          <h3>PV Module Specs &amp; Angles</h3>
+          <p><strong>Voc / Isc</strong> — Open-Circuit Voltage / Short-Circuit Current</p>
+          <p><strong>Vmp / Imp</strong> — Voltage &amp; Current at Maximum Power</p>
+          <p><strong>Solar Elevation</strong> — Angle of the Sun above the horizon</p>
+          <p><strong>Solar Azimuth</strong> — Compass direction of the Sun (0° N, 90° E, 180° S, 270° W)</p>
+          <p><strong>Incidence Angle</strong> — Angle between direct sunbeams and the panel surface</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="notice">
+      <h2>Important Note</h2>
+      <p>
+        Weather data is retrieved automatically via the Open-Meteo Forecast/Archive APIs with
+        7Timer! live cloud/weather backup for your chosen city and date. If offline or blocked by
+        a local firewall, the simulation smoothly falls back to a clear-sky physical estimate.
+        Actual field PV output may still vary due to local shading, soiling, wind cooling, snow,
+        and wiring losses.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Solar Energy Tracker • Physics-Based PV Simulation</p>
+  </footer>
+</body>
+</html>

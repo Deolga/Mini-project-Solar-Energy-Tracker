@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar Panel Simulation • Weather-Driven PV Model</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>☀ SOLAR PANEL SIMULATION</h1>
+    <p>Weather-Driven Physics-Based Photovoltaic Performance Model</p>
+  </header>
+
+  <main class="simulation-page">
+    <section class="controls">
+      <h2>Simulation Parameters</h2>
+      <div id="weatherStatus" class="weather-status">Ready to fetch live weather report...</div>
+
+      <div class="control-grid">
+        <div class="control-group">
+          <h3>Location &amp; Date</h3>
+          <label>City Name (or Lat, Lon)
+            <input type="text" id="cityInput" value="New Delhi" placeholder="e.g., New Delhi, Mumbai, London">
+          </label>
+          <div id="resolvedLocation" class="resolved-coords">New Delhi, India (28.61°N, 77.21°E)</div>
+          <label>Date
+            <input type="date" id="date">
+          </label>
+        </div>
+
+        <div class="control-group">
+          <h3>Panel Orientation</h3>
+          <label>Tilt (°)
+            <input type="number" id="tilt" value="30" min="0" max="90">
+          </label>
+          <label>Azimuth (°)
+            <input type="number" id="azimuth" value="180" min="0" max="360">
+          </label>
+          <label>Tracking
+            <select id="tracking">
+              <option value="off">OFF</option>
+              <option value="on">ON</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="control-group">
+          <h3>PV Module &amp; Inverter</h3>
+          <label>Rated Power (W)
+            <input type="number" id="ratedPower" value="400" min="1">
+          </label>
+          <label>Voc (V) / Isc (A)
+            <div class="dual-input">
+              <input type="number" id="voc" value="49.5" step="0.1" title="Open-Circuit Voltage (V)">
+              <input type="number" id="isc" value="10.5" step="0.1" title="Short-Circuit Current (A)">
+            </div>
+          </label>
+          <label>Vmp (V) / Imp (A)
+            <div class="dual-input">
+              <input type="number" id="vmp" value="41.5" step="0.1" title="Voltage at Max Power (V)">
+              <input type="number" id="imp" value="9.65" step="0.1" title="Current at Max Power (A)">
+            </div>
+          </label>
+          <label>Inverter Efficiency (%)
+            <input type="number" id="inverterEfficiency" value="96" min="50" max="100" step="0.5">
+          </label>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button id="homeButton" type="button">BACK TO HOME</button>
+        <button id="startSimulation" type="button">START</button>
+        <button id="stopSimulation" type="button">STOP</button>
+        <button id="resetSimulation" type="button">RESET</button>
+        <button id="showLog" type="button">SHOW LOG</button>
+      </div>
+    </section>
+
+    <section class="visuals">
+      <div class="canvas-card">
+        <h2>Solar Panel &amp; Sun</h2>
+        <canvas id="simulationCanvas" width="580" height="580"></canvas>
+      </div>
+      <div class="canvas-card">
+        <h2>24-Hour AC Power</h2>
+        <canvas id="graphCanvas" width="580" height="580"></canvas>
+      </div>
+    </section>
+
+    <section class="results">
+      <h2>Simulation Results</h2>
+      <div class="result-grid">
+        <div><span>Current Time</span><strong id="currentTime">00:00</strong></div>
+        <div><span>Current Power</span><strong id="currentPower">0 W</strong></div>
+        <div><span>Maximum Power</span><strong id="maxPower">0 W</strong></div>
+        <div><span>Average Power</span><strong id="averagePower">0 W</strong></div>
+        <div><span>Solar Elevation</span><strong id="solarElevation">0°</strong></div>
+        <div><span>Solar Azimuth</span><strong id="solarAzimuth">0°</strong></div>
+        <div><span>Incidence Angle</span><strong id="incidenceAngle">0°</strong></div>
+        <div><span>POA Irradiance</span><strong id="poaIrradiance">0 W/m²</strong></div>
+        <div><span>Module Temperature</span><strong id="moduleTemperature">0 °C</strong></div>
+        <div><span>MPP Voltage</span><strong id="mppVoltage">0 V</strong></div>
+        <div><span>MPP Current</span><strong id="mppCurrent">0 A</strong></div>
+        <div><span>DC Power</span><strong id="dcPower">0 W</strong></div>
+        <div><span>AC Power</span><strong id="acPower">0 W</strong></div>
+        <div><span>Daily Energy</span><strong id="dailyEnergy">0 kWh</strong></div>
+      </div>
+    </section>
+
+    <section id="logContainer" class="log-container">
+      <h2>Hourly Simulation Log</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Elevation</th>
+              <th>Azimuth</th>
+              <th>Incidence</th>
+              <th>DNI (W/m²)</th>
+              <th>DHI (W/m²)</th>
+              <th>GHI (W/m²)</th>
+              <th>POA (W/m²)</th>
+              <th>Cell Temp</th>
+              <th>Vmp</th>
+              <th>Imp</th>
+              <th>DC Power</th>
+              <th>AC Power</th>
+            </tr>
+          </thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="information">
+      <h2>How This Simulation Works</h2>
+      <p>
+        When you enter a city name and date, the simulation automatically resolves its geographic
+        coordinates, detects the local timezone, and downloads hourly weather data (GHI, DNI, DHI,
+        and ambient temperature) from Open-Meteo (with automatic 7Timer! live weather backup).
+      </p>
+      <p>
+        At each time step, it computes the Sun's position, transposes horizontal irradiance onto
+        the tilted or tracked panel plane, applies glass reflection losses, and calculates cell
+        temperature via the NOCT model. These values feed a calibrated single-diode model to find
+        the Maximum Power Point (MPP), followed by standard system losses (8%) and inverter
+        efficiency to integrate daily AC energy.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Solar Energy Tracker • Physics-Based PV Simulation</p>
+  </footer>
+
+  <script src="simulation.js"></script>
+</body>
+</html>
